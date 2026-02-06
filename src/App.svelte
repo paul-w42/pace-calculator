@@ -22,13 +22,14 @@
   <input type="radio" name="pace" id="kph"><label for="kph">km/hour</label>
   <input type="radio" name="pace" id="mpm"><label for="mpm">min/mile</label> -->
 <main>
+
   <h1>Pace Calculator</h1>
   
-  <h2>Enter any two values to solve the third</h2>
+  <h2>enter any two values to solve the third</h2>
 
-  <Pace style="padding-top: 1em;" />
+  <Pace />
 
-  <Distance style="padding-top: 1em;" />
+  <Distance />
 
   <Time />
 
@@ -41,12 +42,15 @@
 
   main {
     text-align: left;
-    width: 100%; padding: 0; margin: 0;
+    width: 100%; padding: 0;
+    display: flex;
+    row-gap: 1em;
+    flex-direction: column;
   }
   h1 {
     width: 80%; 
     margin: 0 auto;
-    margin-bottom: 2.0em;
+    /* margin-bottom: 2.0em; */
     font-size: 1.6rem;
     text-align: center;
     /* color: black; */
@@ -57,7 +61,7 @@
     font-size: 1.2rem;
     text-align: center;
     margin: 0 auto;
-    margin-bottom: 1.2rem;
+    /* margin-bottom: 1.2rem; */
     color: darkslategrey
   }
 

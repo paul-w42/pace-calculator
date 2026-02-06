@@ -35,6 +35,13 @@
 
 <style>
 
+   h2 {
+      font-size: 1.1rem;
+      flex-grow: 1;
+      flex-basis: 50%;
+      margin: 1em 0 0;
+   }
+
    div.grid {
       display: grid;
       grid-template-columns: repeat(3, max-content);
@@ -42,18 +49,14 @@
       column-gap: 0.4rem;
       justify-items: end;
       margin-left: auto;
-      width: max-content
+      width: max-content;
+      /* margin-top: 0; */
    }
 
    div.grid > span {
       width: 100%;
    }
 
-   h2 {
-      font-size: 1.1rem;
-      flex-grow: 1;
-      flex-basis: 50%;
-   }
 
    input {
       display: inline;
