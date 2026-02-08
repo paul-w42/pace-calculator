@@ -1,14 +1,8 @@
 <script>
-   import deleteIcon from '../assets/delete.svg';
-   import { totalTime, activeComponent } from './stores/stores';
+   import deleteIcon from '../assets/delete-grey.svg';
+   import { totalTime, trackRecent, activeComponent } from './stores/stores';
 
    let {style = ''} = $props();
-
-   const clearDistance = () => {
-      $activeComponent = 'dist';
-      $totalTime = null;
-   };
-
    let hours = $state();
    let mins = $state();
    let secs = $state();
@@ -16,7 +10,20 @@
    const timeChange = () => {
       // totalTime is in ms
       $activeComponent = 'dist';
-      $totalTime = ((hours * 3600 + mins * 60 + secs) * 1000); // *1000 === time in ms
+      const h = hours ?? 0;
+      const m = mins ?? 0;
+      const s = secs ?? 0;
+
+      $totalTime = (h * 3600 + m * 60 + s) * 1000; // *1000 === time in ms
+      console.log('$totalTime: ', $totalTime);
+      trackRecent('time');
+   }
+
+   const clearTime = () => {
+      hours = null;
+      mins = null;
+      secs = null;
+      timeChange();
    }
 
 </script>
@@ -27,10 +34,14 @@
          <span>hrs</span>
          <span>min</span>
          <span>sec</span>
+         <span></span>
 
-         <input type="number" id="hours" bind:value={$hours} onchange={timeChange} />
-         <input type="number" id="mins" bind:value={$mins} onchange={timeChange} />
-         <input type="number" id="secs" bind:value={$secs} onchange={timeChange} />
+         <input type="number" id="hours" bind:value={hours} oninput={timeChange} />
+         <input type="number" id="mins" bind:value={mins} oninput={timeChange} />
+         <input type="number" id="secs" bind:value={secs} oninput={timeChange} />
+         <button onclick={clearTime} aria-label='clear time value' >
+            <img src={deleteIcon} alt='clear time value'/>
+         </button>
    </div>
 
 <style>
@@ -44,7 +55,7 @@
 
    div.grid {
       display: grid;
-      grid-template-columns: repeat(3, max-content);
+      grid-template-columns: repeat(4, max-content);
       grid-template-rows: repeat(2, auto);
       column-gap: 0.4rem;
       justify-items: end;
@@ -55,6 +66,11 @@
 
    div.grid > span {
       width: 100%;
+   }
+
+   div.grid button {
+      background: none;
+      margin: 0; padding: 0;
    }
 
 

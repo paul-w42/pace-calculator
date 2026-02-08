@@ -1,14 +1,34 @@
 <script>
    import deleteIcon from '../assets/delete.svg';
-   import { paceNum, paceType, activeComponent } from './stores/stores';
+   import { paceNum, paceType, totalTime, distNum, trackRecent, activeComponent } from './stores/stores';
 
    let {style = ''} = $props();
-   // let pace = $state();
+   let pace = $state();
 
    const clearPace = () => {
       $activeComponent = 'pace';
       $paceNum = null;
+      pace = null;
    };
+
+   // save pace as meters/second
+   const setPace = () => {
+      // if pace is kph
+      if ($paceType === 'kph') {
+         $paceNum = pace * 1000 / 3600; // i.e. 1 kph =  3,600,000 m/s
+      } 
+      // else if pace is mph
+      else if ($paceType === 'mph') {
+         $paceNum = pace * 0.44704;
+      } 
+      // pace is min/mile
+      else {
+         $paceNum = 1609.344 / (pace * 60);
+      }
+      
+      console.log('$paceNum: ', $paceNum);
+      trackRecent('pace');
+   }
 
 </script>
 
@@ -18,11 +38,11 @@
    <div class="container" style={style}>
 
       <div class="input-div">
-         <input type="number" id="pace" bind:value={$paceNum} />
+         <input type="number" id="pace" bind:value={pace} oninput={setPace} />
          <button onclick={clearPace} aria-label='clear pace value'>X</button>
       </div>
       
-      <select name="pace" id="pace" bind:value={$paceType}>
+      <select name="pace" id="pace" bind:value={$paceType} oninput={setPace}>
          <option value="mph">miles/hour</option>
          <option value="kph">km/hour</option>
          <option value="mpm">min/mile</option>
@@ -54,7 +74,7 @@
 
    div.input-div input {
       width: 100%;
-      padding-right: 2em;
+      padding-right: 1.8em;
       border: 1px solid #86d486;
       /* border-radius: 5px; */
       box-sizing: border-box;
@@ -69,7 +89,8 @@
       background: none;
       cursor: pointer;
       font-size: 15px;
-      font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      /* font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; */
+      font-family: Arial, Helvetica, sans-serif;
       line-height: 1;
       color: #8f8f8f;
    }

@@ -2,7 +2,8 @@
 
 <script>
    import deleteIcon from '../assets/delete.svg';
-   import { distNum, distType, meters, milesToMeters, activeComponent } from './stores/stores';
+   import { distNum, distType, meters, milesToMeters, activeComponent, 
+      trackRecent, setCalculatedValue } from './stores/stores';
 
    let {style = ''} = $props();
 
@@ -12,6 +13,7 @@
    };
 
    const distanceChange = () => {
+
       // distType === 'miles', 'km', or 'laps'
       if ($distNum) {
          if ($distType === 'miles') {
@@ -21,6 +23,11 @@
          } else if ($distType === 'laps') {
             $meters = $distNum * 400;
          }
+
+         trackRecent('dist');
+         // TODO: calculate required value
+         setCalculatedValue();
+
       }
    }
 
@@ -31,11 +38,11 @@
    <div class="container" style={style}>
 
       <div class="input-div">
-         <input type="number" id="pace" bind:value={$distNum} />
+         <input type="number" id="pace" bind:value={$distNum} oninput={distanceChange} />
          <button onclick={clearDistance} aria-label='clear pace value'>X</button>
       </div>
       
-      <select name="pace" id="pace" bind:value={$distType}>
+      <select name="pace" id="pace" bind:value={$distType} oninput={distanceChange}>
          <option value="miles">miles</option>
          <option value="km">km</option>
          <option value="laps">laps(400m)</option>
@@ -69,7 +76,7 @@
 
    div.input-div input {
       width: 100%;
-      padding-right: 2em;
+      padding-right: 1.8em;
       border: 1px solid #86d486;
       /* border-radius: 5px; */
       box-sizing: border-box;
@@ -84,7 +91,8 @@
       background: none;
       cursor: pointer;
       font-size: 15px;
-      font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      /* font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; */
+      font-family: Arial, Helvetica, sans-serif;
       line-height: 1;
       color: #8f8f8f;
    }
