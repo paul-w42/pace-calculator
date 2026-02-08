@@ -2,31 +2,34 @@
 
 <script>
    import deleteIcon from '../assets/delete.svg';
-   import { distNum, distType, meters, milesToMeters, activeComponent, 
-      trackRecent, setCalculatedValue } from './stores/stores';
+   import { distValue, distType, distDisp, meters, milesToMeters, activeComponent, 
+      trackRecent, calculateResult } from './stores/stores';
 
    let {style = ''} = $props();
 
    const clearDistance = () => {
       $activeComponent = 'dist';
-      $distNum = null;
+      $distDisp = null;
    };
 
    const distanceChange = () => {
 
       // distType === 'miles', 'km', or 'laps'
-      if ($distNum) {
-         if ($distType === 'miles') {
-            $meters = milesToMeters($distNum);
-         } else if ($distType === 'km') {
-            $meters = $distNum * 1000;
-         } else if ($distType === 'laps') {
-            $meters = $distNum * 400;
-         }
+      // console.log('distType: ', $distType);
 
+      if ($distDisp) {
+         if ($distType === 'miles') {
+            $meters = milesToMeters($distDisp);
+         } else if ($distType === 'km') {
+            $meters = $distDisp * 1000;
+         } else if ($distType === 'laps') {
+            $meters = $distDisp * 400;
+         }
+      
+         console.log('$meters: ', $meters);
          trackRecent('dist');
-         // TODO: calculate required value
-         setCalculatedValue();
+         
+         calculateResult();
 
       }
    }
@@ -38,11 +41,11 @@
    <div class="container" style={style}>
 
       <div class="input-div">
-         <input type="number" id="pace" bind:value={$distNum} oninput={distanceChange} />
+         <input type="number" id="pace" bind:value={$distDisp} oninput={distanceChange} />
          <button onclick={clearDistance} aria-label='clear pace value'>X</button>
       </div>
       
-      <select name="pace" id="pace" bind:value={$distType} oninput={distanceChange}>
+      <select name="pace" id="pace" bind:value={$distType} onchange={distanceChange}>
          <option value="miles">miles</option>
          <option value="km">km</option>
          <option value="laps">laps(400m)</option>

@@ -4,70 +4,60 @@ type Key = 'pace' | 'dist' | 'time' | '';
 let recentList:Key[] = ['', ''];
 
 export function trackRecent(mostRecent: Key) {
-   recentList.push(mostRecent);
-   recentList.shift();
-   console.log('trackRecent, saving ', mostRecent);
+   if (recentList.indexOf(mostRecent) === -1) {
+      recentList.push(mostRecent);
+      recentList.shift();
+   }
+   // console.log('trackRecent, saving ', mostRecent);
 }
 
 // Pace value and value unit type
-export const paceNum = writable<number | null>(null);
+export const paceDisp = writable<number | null>(null);
 export const paceType = writable<string>('mph');   //mph, kph, mpm (min/mile)
+export const paceValue = writable<number | null>(null);
 
 
 // distance and distance unit type
-export const distNum = writable<number | null>();
+export const distDisp = writable<number | null>();
+export const distValue = writable<number | null>();
 export const distType = writable<string>('km');   // miles, km, laps(400m),
 export const meters = writable<number>(0);
 
-// total time in ms
-export const totalTime = writable<number | null>();
+// total time in seconds (ms?)
+export const hrsDisp = writable<number | null>();
+export const minsDisp = writable<number | null>();
+export const secsDisp = writable<number | null>();
+export const totalTime = writable<number | null>();   // seconds
 
 // active component
 export const priorActiveComp = writable<string>('time');
 export const activeComponent = writable<string>('pace'); // pace ,dist, time
 
+export function calculateResult() {
+   console.log('recentList: ', recentList);
 
-// save ActiveComponent to priorActiveComp, set new activeComponent
-// export function setActiveComponent(newComponent: Key) {
-//    if (get(activeComponent) !== newComponent) {
-//       priorActiveComp.set(get(activeComponent));
-//       activeComponent.set(newComponent);
-//    }
-// }
-
-export function setCalculatedValue(newComponent: string | number) {
    // if we are calculating for 'dist
    if (recentList.indexOf('dist') === -1) {
-
+      console.log('calculating distance ... ');
    }
    // else if we are calculating for pace
    else if (recentList.indexOf('pace') === -1) {
-
+      console.log('calculating pace ... ');
    }
    // else we are calculating for time
    else {
+      console.log('calculating time ... ');
+      // we have pace in m/s and distance in m
+      // i.e. 1 m/2 for 100 meters = 100 seconds
+      const m = get(meters);
+      const p = paceValue ? get(paceValue) : null;
 
+      if (m != null && p != null) {
+         totalTime.set(Math.round(m / p));
+      }
    }
 }
 
-/*
-* - Result is calculated using meters(distance), seconds(time), and meters/second(pace)
-* - Use activeComponent and priorActiveComp to determine which component to solve for
-*/
-export function calculateResult() {
-   // solve for 'pace'
-   if (get(activeComponent) !== 'pace' && get(priorActiveComp) !== 'pace') {
-      // const metersSecond = 
-   } 
-   // solve for dist
-   else if (get(activeComponent) !== 'dist' && get(priorActiveComp) !== 'dist') {
-
-   }
-   // solve for time
-   else {
-
-   }
-}
 
 // DISTANCE CONVERSION FUNCTIONS .........................
 

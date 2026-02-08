@@ -1,11 +1,39 @@
 <script>
    import deleteIcon from '../assets/delete-grey.svg';
-   import { totalTime, trackRecent, activeComponent } from './stores/stores';
+   import { totalTime, trackRecent, activeComponent, calculateResult } from './stores/stores';
 
    let {style = ''} = $props();
-   let hours = $state();
-   let mins = $state();
-   let secs = $state();
+   // let hours = $state();
+   let hours = $derived.by(() => {
+      if ($totalTime) {
+         return Math.floor($totalTime / 3600);
+      } else {
+         return null;
+      }
+   });
+
+   let mins = $derived.by(() => {
+      if ($totalTime) {
+         let hrs = Math.floor($totalTime / 3600); 
+         // subtract hours from totalTime, determine minutes remaining
+         return Math.floor(($totalTime - (hrs * 3600)) / 60)
+      }
+      else {
+         return null;
+      }
+   });
+
+   let secs = $derived.by(() => {
+      if ($totalTime) {
+         const mins = Math.floor($totalTime / 60);
+         console.log('minutes: ', mins);
+         console.log('$totalTime: ', $totalTime);
+         console.log('remaining seconds: ', $totalTime - Math.floor($totalTime/60) * 60);
+         return Math.floor($totalTime - Math.floor($totalTime/60) * 60);
+      } else {
+         return null;
+      }
+   });
 
    const timeChange = () => {
       // totalTime is in ms
@@ -17,6 +45,7 @@
       $totalTime = (h * 3600 + m * 60 + s) * 1000; // *1000 === time in ms
       console.log('$totalTime: ', $totalTime);
       trackRecent('time');
+      calculateResult();
    }
 
    const clearTime = () => {

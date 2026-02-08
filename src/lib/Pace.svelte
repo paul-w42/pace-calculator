@@ -1,33 +1,35 @@
 <script>
    import deleteIcon from '../assets/delete.svg';
-   import { paceNum, paceType, totalTime, distNum, trackRecent, activeComponent } from './stores/stores';
+   import { paceValue, paceType, paceDisp, trackRecent, activeComponent, calculateResult } from './stores/stores';
 
    let {style = ''} = $props();
-   let pace = $state();
+   // let pace = $state();
+   // let pace = $derived($paceNum);
 
    const clearPace = () => {
       $activeComponent = 'pace';
-      $paceNum = null;
-      pace = null;
+      $paceValue = null;
+      $paceDisp = null;
    };
 
    // save pace as meters/second
    const setPace = () => {
       // if pace is kph
-      if ($paceType === 'kph') {
-         $paceNum = pace * 1000 / 3600; // i.e. 1 kph =  3,600,000 m/s
+      if ($paceType === 'kph' && $paceDisp) {
+         $paceValue = $paceDisp * 1000 / 3600; // i.e. 1 kph =  3,600,000 m/s
       } 
       // else if pace is mph
-      else if ($paceType === 'mph') {
-         $paceNum = pace * 0.44704;
+      else if ($paceType === 'mph' && $paceDisp) {
+         $paceValue = $paceDisp * 0.44704;
       } 
       // pace is min/mile
-      else {
-         $paceNum = 1609.344 / (pace * 60);
+      else if ($paceDisp) {
+         $paceValue = 1609.344 / ($paceDisp * 60);
       }
       
-      console.log('$paceNum: ', $paceNum);
+      console.log('$paceNum: ', $paceValue);
       trackRecent('pace');
+      calculateResult();
    }
 
 </script>
@@ -38,11 +40,11 @@
    <div class="container" style={style}>
 
       <div class="input-div">
-         <input type="number" id="pace" bind:value={pace} oninput={setPace} />
+         <input type="number" id="pace" bind:value={$paceDisp} oninput={setPace} />
          <button onclick={clearPace} aria-label='clear pace value'>X</button>
       </div>
       
-      <select name="pace" id="pace" bind:value={$paceType} oninput={setPace}>
+      <select name="pace" id="pace" bind:value={$paceType} onchange={setPace}>
          <option value="mph">miles/hour</option>
          <option value="kph">km/hour</option>
          <option value="mpm">min/mile</option>
