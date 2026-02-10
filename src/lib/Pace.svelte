@@ -1,10 +1,24 @@
 <script>
+   import { derived } from 'svelte/store';
    import deleteIcon from '../assets/delete.svg';
-   import { paceValue, paceType, paceDisp, trackRecent, activeComponent, calculateResult } from './stores/stores';
+   import { paceValue, paceType, paceDisp, trackRecent, roundPlace, calculateResult } from './stores/stores';
 
    let {style = ''} = $props();
    // let pace = $state();
    // let pace = $derived($paceNum);
+   let pace = $derived.by(() => {
+      // $paceType = mph, kph, or mpm (min/mile)
+      if ($paceValue !== null) {
+         // return $paceValue;
+         if ($paceType === 'mph') {
+            return roundPlace(15.666666, 2);
+         } else if ($paceType === 'kph') {
+            return roundPlace(($paceValue * 3.6), 2);
+         } else if ($paceType === 'mpm') {
+            return roundPlace((26.8224 / $paceValue), 2);
+         }
+      }
+   });
 
    const clearPace = () => {
       // $activeComponent = 'pace';
@@ -40,7 +54,7 @@
    <div class="container" style={style}>
 
       <div class="input-div">
-         <input type="number" id="pace" bind:value={$paceDisp} oninput={setPace} />
+         <input type="number" id="pace" bind:value={pace} oninput={setPace} />
          <button onclick={clearPace} aria-label='clear pace value'>X</button>
       </div>
       

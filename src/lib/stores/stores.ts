@@ -61,18 +61,14 @@ export function calculateResult() {
    }
    // else if we are calculating for pace
    else if (recentList.indexOf('pace') === -1) {
-      // console.log('calculating pace ... ');
       const m = get(meters);
       const t = get(totalTime);
 
       if (m != null && t != null && t !== 0) {
-         paceValue.set(m / t);
-         if (get(paceType) === 'mph') {
-            paceValue.set(get(meters) / 1609.344 / 3600);   // meters / meters-per-mile / 3600 s/hour
-         }
-         console.log('set pace value to: ', get(paceValue));
+         paceValue.set(roundPlace(m / t, 2));
+         console.log('calculateResult(): paceValue set: ' + get(paceValue) + ' m/s');
       }
-      console.log('calculateResult(): paceValue set: ' + get(paceValue) + ' m/s');
+      
    }
    // else we are calculating for time
    else if (recentList.indexOf('time') == -1) {
@@ -144,7 +140,7 @@ function paceMpm() {
 }
 
 // return a number rounded to a particular place, i.e. 33.33333 becomes 33.3
-function roundPlace(value: number, place: number) {
+export function roundPlace(value: number, place: number) {
    const exp = Math.pow(10, place);    // i.e. place of 2 would return 100
    return (Math.round(value * exp) / exp);
 }
