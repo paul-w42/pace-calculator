@@ -1,33 +1,50 @@
 <!-- Distance is stored in meters, all other types converted as required -->
 
 <script>
+   import { get } from 'svelte/store';
    import deleteIcon from '../assets/delete.svg';
-   import { distValue, distType, distDisp, meters, milesToMeters, activeComponent, 
-      trackRecent, calculateResult } from './stores/stores';
+   import { distValue, distType, distDisp, meters, milesToMeters, 
+      trackRecent, calculateResult, 
+      metersToMiles} from './stores/stores';
 
    let {style = ''} = $props();
+   
+   // if $distValue is changed in store, re-calc displayed distance inside input
+   let distance = $derived.by(() => {
+
+      if ($distValue === null || $distValue === 0) {
+         return null;
+      }
+      
+      if ($distType === 'miles') {
+         return metersToMiles($distValue);
+      } else if ($distType === 'km') {
+         return $distValue / 1000;
+      } else if ($distType === 'laps') {
+         return $distValue / 400;
+      }
+
+   });
 
    const clearDistance = () => {
-      $activeComponent = 'dist';
-      $distDisp = null;
+      distance = null;
    };
 
    const distanceChange = () => {
 
       // distType === 'miles', 'km', or 'laps'
-      // console.log('distType: ', $distType);
-
-      if ($distDisp) {
+      if (distance) {
          if ($distType === 'miles') {
-            $meters = milesToMeters($distDisp);
+            $meters = milesToMeters(distance);
          } else if ($distType === 'km') {
-            $meters = $distDisp * 1000;
+            $meters = distance * 1000;
          } else if ($distType === 'laps') {
-            $meters = $distDisp * 400;
+            $meters = distance * 400;
          }
       
          console.log('$meters: ', $meters);
          trackRecent('dist');
+         
          
          calculateResult();
 
@@ -41,7 +58,7 @@
    <div class="container" style={style}>
 
       <div class="input-div">
-         <input type="number" id="pace" bind:value={$distDisp} oninput={distanceChange} />
+         <input type="number" id="pace" bind:value={distance} oninput={distanceChange} />
          <button onclick={clearDistance} aria-label='clear pace value'>X</button>
       </div>
       

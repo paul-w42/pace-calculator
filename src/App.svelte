@@ -7,7 +7,6 @@
   import Time from './lib/Time.svelte';
   import { paceValue, paceType, distValue, distType, totalTime } from './lib/stores/stores';
 
-
   
 </script>
 

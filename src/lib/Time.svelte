@@ -36,13 +36,12 @@
    });
 
    const timeChange = () => {
-      // totalTime is in ms
-      $activeComponent = 'dist';
+      // $activeComponent = 'time';
       const h = hours ?? 0;
       const m = mins ?? 0;
       const s = secs ?? 0;
 
-      $totalTime = (h * 3600 + m * 60 + s) * 1000; // *1000 === time in ms
+      $totalTime = (h * 3600 + m * 60 + s);  // keeping time in seconds, not ms
       console.log('$totalTime: ', $totalTime);
       trackRecent('time');
       calculateResult();

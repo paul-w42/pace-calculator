@@ -7,7 +7,7 @@
    // let pace = $derived($paceNum);
 
    const clearPace = () => {
-      $activeComponent = 'pace';
+      // $activeComponent = 'pace';
       $paceValue = null;
       $paceDisp = null;
    };
