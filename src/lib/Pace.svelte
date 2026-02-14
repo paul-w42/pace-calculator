@@ -1,7 +1,9 @@
-<script>
+<script lang="ts">
    import { derived } from 'svelte/store';
    import deleteIcon from '../assets/delete.svg';
-   import { paceValue, paceType, paceDisp, trackRecent, roundPlace, calculateResult } from './stores/stores';
+   import { isRecent, paceValue, type PaceType, paceMetric, 
+      trackRecent, roundPlace, calculateResult } from './stores/stores';
+   import { untrack } from 'svelte';
 
    let {style = ''} = $props();
    // let pace = $state();
@@ -9,41 +11,71 @@
    let pace = $derived.by(() => {
       // $paceType = mph, kph, or mpm (min/mile)
       if ($paceValue !== null) {
-         // return $paceValue;
-         if ($paceType === 'mph') {
-            return roundPlace(15.666666, 2);
-         } else if ($paceType === 'kph') {
-            return roundPlace(($paceValue * 3.6), 2);
-         } else if ($paceType === 'mpm') {
-            return roundPlace((26.8224 / $paceValue), 2);
-         }
+         return formatPace(); 
+         // if ($paceMetric === 'mph') {
+         //    return roundPlace($paceValue * 2.23694, 1);  // convert m/s to mph
+         // } else if ($paceMetric === 'kph') {
+         //    return roundPlace(($paceValue * 3.6), 1);    // convert m/s to kph
+         // } else if ($paceMetric === 'mpm') {
+         //    return roundPlace((26.8224 / $paceValue), 2);   // convert m/s to mpm
+         // }
       }
    });
 
    const clearPace = () => {
-      // $activeComponent = 'pace';
       $paceValue = null;
-      $paceDisp = null;
+   };
+
+   const formatPace = (): number => {
+
+      let paceType: PaceType = untrack(() => $paceMetric);
+
+      if ($paceValue !== null) {
+         switch (paceType) {
+            case 'mph':
+               return roundPlace($paceValue * 2.23694, 1);  // convert m/s to mph
+            case 'kph':
+               return roundPlace(($paceValue * 3.60), 1);    // convert m/s to kph
+            case 'mpm':
+               return roundPlace((26.8224 / $paceValue), 2);   // convert m/s to mpm
+         }
+      }
+      return 0;
    };
 
    // save pace as meters/second
    const setPace = () => {
       // if pace is kph
-      if ($paceType === 'kph' && $paceDisp) {
-         $paceValue = $paceDisp * 1000 / 3600; // i.e. 1 kph =  3,600,000 m/s
+      if ($paceMetric === 'kph' && pace) {
+         $paceValue = pace * 0.27777777777778; // i.e. 1 kph =  3,600,000 m/s
       } 
       // else if pace is mph
-      else if ($paceType === 'mph' && $paceDisp) {
-         $paceValue = $paceDisp * 0.44704;
+      else if ($paceMetric === 'mph' && pace) {
+         $paceValue = pace * 0.44704;
       } 
       // pace is min/mile
-      else if ($paceDisp) {
-         $paceValue = 1609.344 / ($paceDisp * 60);
+      else if (pace) {
+         $paceValue = 1609.344 / (pace * 60);
       }
       
-      console.log('$paceNum: ', $paceValue);
+      console.log('\n$paceNum: ', $paceValue);
       trackRecent('pace');
       calculateResult();
+   }
+
+   // re-calculate the displayed  value only if this is a calculated value
+   const changeMetric = () => {
+      console.log('\nPace: changeMetric()');
+      if (!isRecent('pace')) {
+         // value is re-calculated, re-format output to correct type
+         console.log('displayout dist in correct type');
+         pace = formatPace();
+      } else {
+         // value is entered, re-calculate result based on new type
+         console.log('calculating new result per pace type');
+         setPace();
+      }
+      
    }
 
 </script>
@@ -58,7 +90,7 @@
          <button onclick={clearPace} aria-label='clear pace value'>X</button>
       </div>
       
-      <select name="pace" id="pace" bind:value={$paceType} onchange={setPace}>
+      <select name="pace" id="pace" bind:value={$paceMetric} onchange={changeMetric}>
          <option value="mph">miles/hour</option>
          <option value="kph">km/hour</option>
          <option value="mpm">min/mile</option>

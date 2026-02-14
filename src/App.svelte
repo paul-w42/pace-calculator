@@ -5,7 +5,7 @@
   import Pace from './lib/Pace.svelte';
   import Distance from './lib/Distance.svelte';
   import Time from './lib/Time.svelte';
-  import { paceValue, paceType, distValue, distType, totalTime } from './lib/stores/stores';
+  // import { paceValue, paceType, distType, totalTime } from './lib/stores/stores';
 
   
 </script>

@@ -26,6 +26,7 @@
    let secs = $derived.by(() => {
       if ($totalTime) {
          const mins = Math.floor($totalTime / 60);
+         console.log('');
          console.log('minutes: ', mins);
          console.log('$totalTime: ', $totalTime);
          console.log('remaining seconds: ', $totalTime - Math.floor($totalTime/60) * 60);
@@ -42,7 +43,7 @@
       const s = secs ?? 0;
 
       $totalTime = (h * 3600 + m * 60 + s);  // keeping time in seconds, not ms
-      console.log('$totalTime: ', $totalTime);
+      // console.log('$totalTime: ', $totalTime);
       trackRecent('time');
       calculateResult();
    }
