@@ -1,6 +1,6 @@
 <script>
    import deleteIcon from '../assets/delete-grey.svg';
-   import { totalTime, trackRecent, activeComponent, calculateResult } from './stores/stores';
+   import { totalTime, trackRecent, calculateResult } from './stores/stores';
 
    let {style = ''} = $props();
    // let hours = $state();
@@ -26,10 +26,10 @@
    let secs = $derived.by(() => {
       if ($totalTime) {
          const mins = Math.floor($totalTime / 60);
-         console.log('');
-         console.log('minutes: ', mins);
-         console.log('$totalTime: ', $totalTime);
-         console.log('remaining seconds: ', $totalTime - Math.floor($totalTime/60) * 60);
+         // console.log('');
+         // console.log('minutes: ', mins);
+         // console.log('$totalTime: ', $totalTime);
+         // console.log('remaining seconds: ', $totalTime - Math.floor($totalTime/60) * 60);
          return Math.floor($totalTime - Math.floor($totalTime/60) * 60);
       } else {
          return null;
@@ -43,7 +43,6 @@
       const s = secs ?? 0;
 
       $totalTime = (h * 3600 + m * 60 + s);  // keeping time in seconds, not ms
-      // console.log('$totalTime: ', $totalTime);
       trackRecent('time');
       calculateResult();
    }

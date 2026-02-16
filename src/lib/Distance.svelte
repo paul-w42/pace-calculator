@@ -2,7 +2,6 @@
 
 <script lang="ts">
    import { untrack } from 'svelte';
-   import { get } from 'svelte/store';
    import { distType, meters, milesToMeters, type DistanceType,
       trackRecent, calculateResult, roundPlace, isRecent,
       metersToMiles} from './stores/stores';
@@ -14,9 +13,6 @@
    
    // if $distValue is changed in store, re-calc displayed distance inside input
    let distance = $derived.by(() => {
-
-      console.log('');
-      console.log('Distance, $meters: ', $meters);
       
       if ($meters === null) {
          return null;
@@ -59,31 +55,27 @@
          } else if ($distType === 'laps') {
             $meters = distance * 400;
          }
-      
-         console.log('$meters: ', $meters);
+
          trackRecent('dist');         
          
          calculateResult();
 
       }
 
-      console.log('');
-      console.log('Distance, distanceChange()');
-      console.log("Distance, distance = ", distance);
-      console.log('$meters: ', $meters);
+      // console.log('');
+      // console.log('Distance, distanceChange()');
+      // console.log("Distance, distance = ", distance);
+      // console.log('$meters: ', $meters);
    };
 
    // metric is changed per select element
    const changeMetric = () => {
-      console.log('\nDistance: changeMetric()');
       if (!isRecent('dist')) {
          // value is re-calculated, re-format output to correct type
-         console.log('displayout dist in correct type');
          distance = roundPlace(formatDistance($distType), 2);
       } 
       else {
          // value is entered, re-calculate result based on new type
-         console.log('calculating new result per dist type');
          distanceChange();
       }      
    }

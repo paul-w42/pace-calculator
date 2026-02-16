@@ -1,6 +1,4 @@
 <script lang="ts">
-   import { derived } from 'svelte/store';
-   import deleteIcon from '../assets/delete.svg';
    import { isRecent, paceValue, type PaceType, paceMetric, 
       trackRecent, roundPlace, calculateResult } from './stores/stores';
    import { untrack } from 'svelte';
@@ -12,13 +10,6 @@
       // $paceType = mph, kph, or mpm (min/mile)
       if ($paceValue !== null) {
          return formatPace(); 
-         // if ($paceMetric === 'mph') {
-         //    return roundPlace($paceValue * 2.23694, 1);  // convert m/s to mph
-         // } else if ($paceMetric === 'kph') {
-         //    return roundPlace(($paceValue * 3.6), 1);    // convert m/s to kph
-         // } else if ($paceMetric === 'mpm') {
-         //    return roundPlace((26.8224 / $paceValue), 2);   // convert m/s to mpm
-         // }
       }
    });
 
@@ -58,21 +49,17 @@
          $paceValue = 1609.344 / (pace * 60);
       }
       
-      console.log('\n$paceNum: ', $paceValue);
       trackRecent('pace');
       calculateResult();
    }
 
    // re-calculate the displayed  value only if this is a calculated value
    const changeMetric = () => {
-      console.log('\nPace: changeMetric()');
       if (!isRecent('pace')) {
          // value is re-calculated, re-format output to correct type
-         console.log('displayout dist in correct type');
          pace = formatPace();
       } else {
          // value is entered, re-calculate result based on new type
-         console.log('calculating new result per pace type');
          setPace();
       }
    }
