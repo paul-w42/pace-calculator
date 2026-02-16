@@ -14,9 +14,9 @@ export default defineConfig({
     },
 
     manifest: {
-      name: 'run-calc',
-      short_name: 'run-calc',
-      description: 'Run Calculator',
+      name: 'pace-calc',
+      short_name: 'pace-calc',
+      description: 'Pace Calculator',
       theme_color: '#6DE165',
     },
 
