@@ -61,7 +61,6 @@
     text-align: center;
     margin: 0 auto;
     /* margin-bottom: 1.2rem; */
-    color: darkslategrey
   }
 
 
