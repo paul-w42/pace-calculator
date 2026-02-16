@@ -24,7 +24,7 @@
 
   <h1>Pace Calculator</h1>
   
-  <h2>enter any two values to solve the third</h2>
+  <h2>Enter any two values to solve the third</h2>
 
   <Pace />
 

@@ -7,7 +7,7 @@ let recentList:Key[] = ['', ''];
 
 // Pace value and value unit type
 export const paceDisp = writable<number | null>(null);
-export const paceMetric = writable<PaceType>('mph');   //mph, kph, mpm (min/mile)
+export const paceMetric = writable<PaceType>('kph');   //mph, kph, mpm (min/mile)
 export const paceValue = writable<number | null>(null);
 
 

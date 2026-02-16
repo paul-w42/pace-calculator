@@ -26,7 +26,7 @@
       $paceValue = null;
    };
 
-   const formatPace = (): number => {
+   const formatPace = (): number | null => {
 
       let paceType: PaceType = untrack(() => $paceMetric);
 
@@ -40,7 +40,7 @@
                return roundPlace((26.8224 / $paceValue), 2);   // convert m/s to mpm
          }
       }
-      return 0;
+      return null;
    };
 
    // save pace as meters/second
@@ -75,7 +75,6 @@
          console.log('calculating new result per pace type');
          setPace();
       }
-      
    }
 
 </script>
