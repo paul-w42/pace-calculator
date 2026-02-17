@@ -104,14 +104,16 @@
    }
 
 
-   input {
+   div.grid > input {
       display: inline;
       width: 3em; margin: 0px;
       border: 1px solid #86d486;
       border-radius: 4px;
+      background-color: white;
+      color: black;
    }
 
-   input:hover {
+   div.grid > input:hover {
       box-shadow: none;
       outline: none;
       background-color: #fffeeb;

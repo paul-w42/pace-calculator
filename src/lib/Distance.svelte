@@ -127,6 +127,8 @@
       width: 100%;
       padding-right: 1.8em;
       border: 1px solid #86d486;
+      background-color: white;
+      color: black;
       /* border-radius: 5px; */
       box-sizing: border-box;
    }

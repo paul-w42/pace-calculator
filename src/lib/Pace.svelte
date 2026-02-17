@@ -112,6 +112,8 @@
       border: 1px solid #86d486;
       /* border-radius: 5px; */
       box-sizing: border-box;
+      background-color: white;
+      color: black;
    }
 
    div.input-div button {
