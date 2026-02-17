@@ -75,9 +75,8 @@
 <style>
 
    h2 {
+      display: inline;
       font-size: 1.1rem;
-      flex-grow: 1;
-      flex-basis: 50%;
       margin: 1em 0 0;
    }
 
@@ -94,6 +93,9 @@
 
    div.grid > span {
       width: 100%;
+      color: black;
+      text-align: right;
+      margin-right: 0.25em;
    }
 
    div.grid button {
@@ -113,16 +115,6 @@
       box-shadow: none;
       outline: none;
       background-color: #fffeeb;
-   }
-
-   select {
-      flex-grow: 0;
-      background-color: #fffeeb;
-   }
-
-   select:hover {
-      box-shadow: none;
-      outline: none;
    }
 
 </style>

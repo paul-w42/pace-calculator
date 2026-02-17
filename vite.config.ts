@@ -1,6 +1,7 @@
 import { VitePWA } from 'vite-plugin-pwa';
-import { defineConfig } from 'vite'
-import { svelte } from '@sveltejs/vite-plugin-svelte'
+import { defineConfig } from 'vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+import pkg from './package.json';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -33,4 +34,7 @@ export default defineConfig({
       type: 'module',
     },
   })],
+  define: {
+    __APP_VERSION__: JSON.stringify(pkg.version)
+  }
 })
